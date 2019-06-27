@@ -1,4 +1,4 @@
-module terraform-provider-decodejson
+module github.com/nikhilsbhat/terraform-provider-decode
 
 go 1.12
 

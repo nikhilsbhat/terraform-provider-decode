@@ -1,22 +1,18 @@
 package decode
 
 import (
-	"strings"
 	"bytes"
 	"encoding/json"
+	"fmt"
 
 	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func resourceId() *schema.Resource {
+func DecodeJSON() *schema.Resource {
 	return &schema.Resource{
-		Create: DecodeJSON,
-		Read:   RepopulateEncodings,
+		Create: Decode,
 		Delete: schema.RemoveFromState,
-		Importer: &schema.ResourceImporter{
-			State: ImportID,
-		},
 
 		Schema: map[string]*schema.Schema{
 			"json_data": {
@@ -33,13 +29,13 @@ func resourceId() *schema.Resource {
 	}
 }
 
-// Test 
-func DecodeJSON(d *schema.ResourceData, meta interface{}) error {
+// Test
+func Decode(d *schema.ResourceData, meta interface{}) error {
 
 	var mapJSON map[string]interface{}
 
-	jsonString := d.Get("json_data")
-	if decodneuerr := JsonDecode([]byte(jsonString), &mapJSON); decodneuerr != nil {
+	jsonString := (d.Get("json_data")).(string)
+	if decodneuerr := jsonDecode([]byte(jsonString), &mapJSON); decodneuerr != nil {
 		return errwrap.Wrapf("Error Decoding JSON to map", decodneuerr)
 	} else {
 		d.Set("json_map", mapJSON)
@@ -47,7 +43,7 @@ func DecodeJSON(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func JsonDecode(data []byte, i interface{}) error {
+func jsonDecode(data []byte, i interface{}) error {
 	err := json.Unmarshal(data, i)
 	if err != nil {
 
