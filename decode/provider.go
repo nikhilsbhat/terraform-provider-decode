@@ -9,9 +9,11 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{},
-
 		ResourcesMap: map[string]*schema.Resource{
-			"decode_json": DecodeJSON(),
+			"decode_json": decodeJSON(),
+		},
+		DataSourcesMap: map[string]*schema.Resource{
+			"decode_json": datadecodeJSON(),
 		},
 	}
 }
